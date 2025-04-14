@@ -1,2 +1,3 @@
-# dsa_2024
-# dsa_2024
+
+Contribution:
+Quicker Repo is used for the base setup
