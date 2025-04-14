@@ -452,7 +452,7 @@ def train_cycle(
     # Then, wrap it with AdaptiveLookahead.
     optimizer = AdaptiveLookahead(
     base_optimizer=base_optimizer,
-    method='adaptive_decrease',  # or 'adaptive_increase' as needed
+    method='adaptive_increase',  # or 'adaptive_increase' as needed
     alpha=0.5,    # You can adjust these hyperparameters
     initial_k=10,
     k_multiplier=5,

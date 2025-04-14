@@ -1,7 +1,7 @@
 #!/bin/bash 
 #SBATCH --job-name=transformer_adam
-#SBATCH --output=transformer_adam_KDec10_200output.log
-#SBATCH --error=transformer_adam_KDec10_200error.log
+#SBATCH --output=transformer_adam_KInc10_200output.log
+#SBATCH --error=transformer_adam_KInc10_200error.log
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
