@@ -452,7 +452,7 @@ def train_cycle(
     # Then, wrap it with AdaptiveLookahead.
     optimizer = AdaptiveLookahead(
     base_optimizer=base_optimizer,
-    method='adaptive_increase',  # or 'adaptive_increase' as needed
+    method='adaptive_decrease',  # or 'adaptive_increase' as needed
     alpha=0.5,    # You can adjust these hyperparameters
     initial_k=10,
     k_multiplier=5,
@@ -907,9 +907,9 @@ def train_cycle(
     # Then, wrap it with AdaptiveLookahead.
     optimizer = AdaptiveLookahead(
      base_optimizer=base_optimizer,
-     method='adaptive_increase',  # or 'adaptive_increase' as needed
+     method=''adaptive_increase',  # or 'adaptive_increase' as needed
      alpha=0.5,    # You can adjust these hyperparameters
-     initial_k=5,
+     initial_k=10,
      k_multiplier=5, 
     )
 
@@ -958,6 +958,7 @@ def train_cycle(
 
     valid_loss = _evaluate(val_iter)
     test_loss = _evaluate(test_iter)
+
     print("FINAL TRAINED MODEL STATS:")
     print(f"\t Val. Loss: {valid_loss:.3f} |  Val. ppl: {math.exp(valid_loss)}")
     print(f"\t Test Loss: {test_loss:.3f} |  Test ppl: {math.exp(test_loss)}")
