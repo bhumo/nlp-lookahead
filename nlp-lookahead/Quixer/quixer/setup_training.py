@@ -858,6 +858,112 @@ def evaluate(
     return epoch_loss / n_batches
 
 
+# def train_cycle(
+#     model: torch.nn.Module,
+#     hyperparams: dict[str, Any],
+#     train_iter: torch.Tensor,
+#     val_iter: torch.Tensor,
+#     test_iter: torch.Tensor,
+# ) -> float:
+#     """
+#     Run a training cycle.
+
+#     Args:
+#       model: The model to train.
+#       hyperparams: The model hyperparameters.
+#       train_iter: Tensor containing training data returned by `setup_dataset` function.
+#       val_iter: Tensor containing validation data returned by `setup_dataset` function.
+#       test_iter: Tensor containing test data returned by `setup_dataset` function.
+#     """
+
+#     folder_path = Path("./trained_models")
+#     folder_path.mkdir(exist_ok=True, parents=True)
+#     checkpoint_fpath = (
+#         folder_path
+#         / f"q_transformer_lm_{hyperparams['model']}_{hyperparams['seed']}_{int(time.time())}.pt"
+#     )
+
+#     # Set up optimizer
+#     """optimizer = torch.optim.Adam(
+#         model.parameters(),
+#         lr=hyperparams["lr"],
+#         weight_decay=hyperparams["wd"],
+#         eps=hyperparams["eps"],
+#     )"""
+#     """
+#     optimizer = torch.optim.SGD(
+#     model.parameters(),
+#     lr=hyperparams["lr"],
+#     weight_decay=hyperparams["wd"],
+#     )"""
+#    # First, create the base optimizer.
+#     base_optimizer = torch.optim.Adam(
+#      model.parameters(),
+#      lr=hyperparams["lr"],
+#      weight_decay=hyperparams["wd"],
+#      eps=hyperparams["eps"], 
+#     )
+
+#     # Then, wrap it with AdaptiveLookahead.
+#     optimizer = AdaptiveLookahead(
+#      base_optimizer=base_optimizer,
+#      method='adaptive_increase',  # or 'adaptive_increase' as needed
+#      alpha=0.5,    # You can adjust these hyperparameters
+#      initial_k=10,
+#      k_multiplier=5, 
+#     )
+
+
+#     # Set up learning rate scheduler
+#     scheduler = None
+#     if hyperparams["lr_sched"] == "cos":
+#         scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
+#             optimizer, T_0=hyperparams["restart_epochs"]
+#         )
+
+#     loss_function = torch.nn.CrossEntropyLoss()
+
+#     def _evaluate(iter: torch.Tensor):
+#         return evaluate(model, iter, loss_function, hyperparams["window"])
+
+#     best_valid_loss = float("inf")
+#     for epoch in range(hyperparams["epochs"]):
+#         start_time = time.time()
+
+#         train_loss = train_epoch(
+#             model,
+#             train_iter,
+#             optimizer,
+#             loss_function,
+#             hyperparams["max_grad_norm"],
+#             scheduler,
+#             hyperparams["window"],
+#         )
+
+#         valid_loss = _evaluate(val_iter)
+
+#         end_time = time.time()
+
+#         epoch_mins, epoch_secs = epoch_time(start_time, end_time)
+
+#         if valid_loss < best_valid_loss:
+#             best_valid_loss = valid_loss
+#             torch.save(model.state_dict(), checkpoint_fpath)
+
+#         print(f"Epoch: {epoch + 1:02} | Time: {epoch_mins}m {epoch_secs}s")
+#         print(f"\tTrain Loss: {train_loss:.3f} | Train ppl: {math.exp(train_loss)}")
+#         print(f"\t Val. Loss: {valid_loss:.3f} |  Val. ppl: {math.exp(valid_loss)}")
+
+#     model.load_state_dict(torch.load(checkpoint_fpath))
+
+#     valid_loss = _evaluate(val_iter)
+#     test_loss = _evaluate(test_iter)
+
+#     print("FINAL TRAINED MODEL STATS:")
+#     print(f"\t Val. Loss: {valid_loss:.3f} |  Val. ppl: {math.exp(valid_loss)}")
+#     print(f"\t Test Loss: {test_loss:.3f} |  Test ppl: {math.exp(test_loss)}")
+
+#     return test_loss
 
 
 def seed(SEED: int) -> None:
