@@ -19,7 +19,7 @@ source /home/bg91882/environments/quixer/bin/activate
 
 module load Python/3.11.3-GCCcore-12.3.0
 
-python run.py -d cuda -m Transformer 
+python adaptive_alpha_run.py -d cuda -m Transformer 
 
 
 
