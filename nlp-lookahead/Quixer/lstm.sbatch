@@ -1,7 +1,7 @@
 #!/bin/bash 
 #SBATCH --job-name=lstm
-#SBATCH --output=lstm_adam_KDec_5_200output.log
-#SBATCH --error=lstm_adam_KDec_5_200error.log
+#SBATCH --output=lstm_adam_KDec_10_200output.log
+#SBATCH --error=lstm_adam_KDec_10_200error.log
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
