@@ -454,7 +454,7 @@ def train_cycle(
     base_optimizer=base_optimizer,
     method='adaptive_decrease',  # or 'adaptive_increase' as needed
     alpha=0.5,    # You can adjust these hyperparameters
-    initial_k=10,
+    initial_k=5,
     k_multiplier=5,
     )
 
