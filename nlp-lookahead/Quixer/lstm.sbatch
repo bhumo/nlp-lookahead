@@ -1,7 +1,7 @@
 #!/bin/bash 
-#SBATCH --job-name=lstm
-#SBATCH --output=lstm_adam_AdaptiveAlpha_K10_0.5_200output.log
-#SBATCH --error=lstm_adam_AdaptiveAlpha_K10_0.5_200error.log
+#SBATCH --job-name=lookahead_lstm
+#SBATCH --output=lstm_adam_Lookahead_K10_0.5_200output.log
+#SBATCH --error=lstm_adam_Lookahead_K10_0.5_200error.log
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
@@ -19,7 +19,7 @@ source /home/bg91882/environments/quixer/bin/activate
 
 module load Python/3.11.3-GCCcore-12.3.0
 
-python adaptive_alpha_run.py -d cuda -m LSTM
+python run.py -d cuda -m LSTM
 
 
 

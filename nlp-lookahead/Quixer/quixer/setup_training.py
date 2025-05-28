@@ -42,6 +42,62 @@ from datasets import load_dataset
 from torchtext.vocab import build_vocab_from_iterator
 from torchtext.data.utils import get_tokenizer
 
+
+
+class Lookahead(torch.optim.Optimizer):
+    def __init__(self, base_optimizer, alpha=0.5, k=5):
+        if not 0.0 <= alpha <= 1.0:
+            raise ValueError(f"Invalid alpha: {alpha}")
+        if not k >= 1:
+            raise ValueError(f"Invalid k: {k}")
+
+        self.base_optimizer = base_optimizer
+        self.alpha = alpha
+        self.k = k
+
+        # Track number of "fast" updates so we know when to do the slow update
+        self._step_count = 0
+
+        # Copy of the fast params to “slow” buffer
+        self.slow_params = []
+        for group in self.base_optimizer.param_groups:
+            sp = []
+            for p in group['params']:
+                sp.append(p.clone().detach())
+            self.slow_params.append(sp)
+
+    @property
+    def param_groups(self):
+        return self.base_optimizer.param_groups
+
+    def zero_grad(self):
+        self.base_optimizer.zero_grad()
+
+    def step(self, closure=None):
+        """
+        1. Perform one 'fast' step with the base optimizer
+        2. Every k steps, update slow weights
+        """
+        loss = self.base_optimizer.step(closure)
+        self._step_count += 1
+
+        if self._step_count % self.k == 0:
+            # Slow update
+            for group_idx, group in enumerate(self.base_optimizer.param_groups):
+                for p_idx, p in enumerate(group['params']):
+                    if p.grad is None:
+                        continue
+                    slow = self.slow_params[group_idx][p_idx]
+                    # slow <- slow + alpha * (fast - slow)
+                    slow += self.alpha * (p.data - slow)
+                    # Then copy back to fast parameters
+                    p.data.copy_(slow)
+
+        return loss
+
+
+
+
 class AdaptiveLookahead(torch.optim.Optimizer):
     def __init__(self, base_optimizer,method, alpha=0.5, initial_k=5, k_multiplier=5):
         if not 0.0 <= alpha <= 1.0:
@@ -457,6 +513,8 @@ def train_cycle(
     initial_k=5,
     k_multiplier=5,
     )
+
+    optimizer = Lookahead(base_optimizer,alpha=0.5,k=10)
 
 
     # Set up learning rate scheduler

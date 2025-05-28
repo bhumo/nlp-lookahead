@@ -5,15 +5,21 @@ import math
 from tqdm import tqdm
 from pathlib import Path
 from typing import Any, Optional, Tuple, Callable
+import torch
+from torch.types import Device
+from quixer.quixer_model import Quixer
+from quixer.baseline_models import Transformer, LSTM, FNet
 
 import numpy as np
-import torch
+
 from torch.nn.modules.loss import _Loss
 import torchtext
 from datasets import load_dataset
 from torchtext.vocab import build_vocab_from_iterator
 from torchtext.data.utils import get_tokenizer
 import matplotlib.pyplot as plt
+
+from torch.types import Device
 # =============================================================================
 # Adaptive Lookahead Optimizer (using adaptive α as in your first code block)
 # =============================================================================
@@ -465,7 +471,7 @@ def train_cycle(model: torch.nn.Module, hyperparams: dict[str, Any],
         print(f"\tTrain Loss: {train_loss:.3f} | Train ppl: {math.exp(train_loss):.3f}")
         print(f"\t Val. Loss: {valid_loss:.3f} |  Val. ppl: {math.exp(valid_loss):.3f}")
 
-     Plot the training and validation loss curves.
+    # Plot the training and validation loss curves.
     plt.figure()
     plt.plot(train_loss_history, label="Train Loss")
     plt.plot(val_loss_history, label="Validation Loss")
