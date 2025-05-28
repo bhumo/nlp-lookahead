@@ -10,16 +10,16 @@
 pip install -e .
 ```
 
-## Running the models
+## Running the models for Adaptive Alpha Lookahead Optimizer
 
 On CPU:
 ```
-python3 run.py -d cpu -m  Transformer LSTM 
+python3 adaptive_alpha_run.py.py -d cpu -m  Transformer LSTM 
 ```
 
 On Nvidia GPU:
 ```
-python3 run.py -d cuda -m  Transformer LSTM 
+python3 adaptive_alpha_run.py.py -d cuda -m  Transformer LSTM 
 ```
 
 You can exclude any of the models in the commands above and it will not be run.
